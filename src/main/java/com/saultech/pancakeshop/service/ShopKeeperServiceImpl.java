@@ -8,8 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class ShopKeeperServiceImpl implements ShopKeeperService, Runnable{
+public class ShopKeeperServiceImpl implements ShopKeeperService{
     private final Logger logger = Logger.getLogger(ShopKeeperServiceImpl.class.getName());
+    private volatile boolean isRunning = true;
     private final List<Pancake> pancakes;
     private User shopKeeper;
 
@@ -19,11 +20,6 @@ public class ShopKeeperServiceImpl implements ShopKeeperService, Runnable{
     }
     public ShopKeeperServiceImpl(List<Pancake> pancakes) {
         this.pancakes = pancakes;
-    }
-
-    public ShopKeeperServiceImpl(List<Pancake> pancakes, User shopKeeper) {
-        this.pancakes = pancakes;
-        this.shopKeeper = shopKeeper;
     }
 
 
@@ -39,17 +35,11 @@ public class ShopKeeperServiceImpl implements ShopKeeperService, Runnable{
     }
 
     @Override
-    public void servePancake() {
-
-    }
-
-    @Override
-    public void run() {
-        logger.info("ShopKeeperService is running");
-        this.bakePancake();
-        int maxNoOfPancakes = 12;
-        while (this.pancakes.size() < maxNoOfPancakes) {
-            this.bakePancake();
+    public void servePancake(User user1, User user2, User user3) {
+        while (!this.pancakes.isEmpty()) {
+            user1.eatPancake(this.pancakes.remove(0).getQuantity());
+            user2.eatPancake(this.pancakes.remove(0).getQuantity());
+            user3.eatPancake(this.pancakes.remove(0).getQuantity());
         }
     }
 }
